@@ -8,7 +8,9 @@ import (
 	"log"
 	"net/http"
 	"oceanlearn.teach/ginessential/common"
+	"oceanlearn.teach/ginessential/dto"
 	"oceanlearn.teach/ginessential/model"
+	"oceanlearn.teach/ginessential/response"
 	"oceanlearn.teach/ginessential/util"
 )
 
@@ -23,7 +25,8 @@ func Login(ctx *gin.Context)  {
 
 	if len(telephone) != 11 {
 		//ctx.JSON(http.StatusUnprocessableEntity, map[string]interface{}{"code":422,"msg":"手机号必须11位"})
-		ctx.JSON(http.StatusUnprocessableEntity, gin.H{"code":422,"msg":"手机号必须11位"})
+		//ctx.JSON(http.StatusUnprocessableEntity, gin.H{"code":422,"msg":"手机号必须11位"})
+		response.Response(ctx, http.StatusUnprocessableEntity, 422, nil, "手机号必须11位")
 	}
 	if len(password) < 6 {
 		ctx.JSON(http.StatusUnprocessableEntity, gin.H{"code":422,"msg":"密码不能少于6位"})
@@ -80,9 +83,7 @@ func Login(ctx *gin.Context)  {
 
 func Info(ctx *gin.Context)  {
 	user, _ := ctx.Get("user")
-
-	ctx.JSON(http.StatusOK, gin.H{"code":200, "data":gin.H{"user": user}})
-	
+	ctx.JSON(http.StatusOK, gin.H{"code":200, "data":gin.H{"user": dto.ToUserDto(user.(model.User))}})
 }
 
 func Register(ctx *gin.Context) {
