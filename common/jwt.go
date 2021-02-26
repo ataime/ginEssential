@@ -14,7 +14,6 @@ type Claims struct {
 }
 
 func ReleaseToken(user model.User) (string, error)  {
-
 	expirationTime := time.Now().Add(7*24*time.Hour)
 	claims := &Claims{
 		UserId:     user.ID,
@@ -32,5 +31,13 @@ func ReleaseToken(user model.User) (string, error)  {
 		return  "", err
 	}
 	return  tokenString, err
+}
 
+
+func ParseToken(tokenString string) (*jwt.Token, *Claims, error)  {
+	claims := &Claims{}
+	token, err := jwt.ParseWithClaims(tokenString, claims, func(token *jwt.Token) (i interface{}, e error) {
+		return  jwtKey,nil
+	})
+	return token, claims, err
 }

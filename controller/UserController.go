@@ -1,6 +1,7 @@
 package controller
 
 import (
+	"fmt"
 	"github.com/gin-gonic/gin"
 	"github.com/jinzhu/gorm"
 	"golang.org/x/crypto/bcrypt"
@@ -56,6 +57,9 @@ func Login(ctx *gin.Context)  {
 	}
 
 	if err := bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(password)) ; err != nil {
+		fmt.Println(password)
+		fmt.Println(user.Password)
+		fmt.Println(bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(password)))
 		ctx.JSON(http.StatusUnprocessableEntity, gin.H{"code": 400, "msg": "密码错误"})
 		return
 	}
@@ -74,6 +78,12 @@ func Login(ctx *gin.Context)  {
 	})
 }
 
+func Info(ctx *gin.Context)  {
+	user, _ := ctx.Get("user")
+
+	ctx.JSON(http.StatusOK, gin.H{"code":200, "data":gin.H{"user": user}})
+	
+}
 
 func Register(ctx *gin.Context) {
 	DB := common.GetDB()
