@@ -4,13 +4,15 @@ import (
 	"fmt"
 	"github.com/jinzhu/gorm"
 	"oceanlearn.teach/ginessential/model"
+	"github.com/spf13/viper"
 )
 
 var DB *gorm.DB
 
 func InitDB() *gorm.DB {
 	driverName := "mysql"
-	host := "192.168.25.110"
+	//host := "192.168.25.110"
+	host := viper.GetString("datasource.host")
 	port := "3306"
 	database := "ginessential"
 	username := "root"
